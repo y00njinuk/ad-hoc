@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+// enables generating a separate .java file for each generated class
+option java_multiple_files = true;
+
+message Person {
+    required string user_name = 1;
+    optional int64 favorite_number = 2;
+    repeated string interests = 3;
+}

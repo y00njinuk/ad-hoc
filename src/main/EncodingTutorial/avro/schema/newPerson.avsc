@@ -1,0 +1,23 @@
+{
+  "type":"record",
+  "name":"Person",
+  "namespace":"com.schema",
+  "fields": [ {
+    "name":"userID",
+    "type":"long",
+    "default":101
+  }, {
+    "name":"favoriteNumber",
+    "type": ["null","long"],
+    "default":null
+  }, {
+    "name":"userName",
+    "type":"string"
+  }, {
+    "name":"interests",
+    "type": {
+      "type":"array",
+      "items":"string"
+    }
+  } ]
+}
