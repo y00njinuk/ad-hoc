@@ -4,6 +4,7 @@
 3. [Oracle 문서에 기록된 자바 리플렉션 사용법과 관련된 예시 정리](https://github.com/y00njinuk/ad-hoc/tree/main/src/main/Reflection)
 4. [자바 스트림 벤치마킹 및 튜토리얼](https://github.com/y00njinuk/ad-hoc/tree/main/src/main/StreamBenchmarkAndTutorial)
 5. [스칼라 케이크 패턴 사용예시](https://github.com/y00njinuk/ad-hoc/blob/main/src/main/CakePattern/CakePatternExam.scala)
+6. [KafkaAdminClient Mock 사용해보기]()
 
 # Test
 1. [컴파일 타임과 런타임 환경에서 equal 메소드 실행 및 결과 비교](https://github.com/y00njinuk/ad-hoc/blob/main/src/test/CompareWithCompileAndRunTimeTest.java)
