@@ -1,4 +1,4 @@
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 /**
  * @see <a href="https://dev.to/tlylt/compile-time-type-vs-run-time-type-oop-java-3-5fgn">
