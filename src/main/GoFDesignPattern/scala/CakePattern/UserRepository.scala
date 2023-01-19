@@ -1,4 +1,4 @@
-package CakePattern
+package GoFDesignPattern.scala.CakePattern
 
 class UserRepository {
   def authenticate(user: User): User = {

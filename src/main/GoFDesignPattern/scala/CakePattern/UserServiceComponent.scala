@@ -1,4 +1,4 @@
-package CakePattern
+package GoFDesignPattern.scala.CakePattern
 
 trait UserServiceComponent { this: UserRepositoryComponent =>
   val userService: UserService

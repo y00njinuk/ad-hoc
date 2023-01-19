@@ -1,4 +1,4 @@
-package CakePattern
+package GoFDesignPattern.scala.CakePattern
 
 object CakePatternExam extends UserServiceComponent with UserRepositoryComponent {
   val userRepository = new UserRepository
