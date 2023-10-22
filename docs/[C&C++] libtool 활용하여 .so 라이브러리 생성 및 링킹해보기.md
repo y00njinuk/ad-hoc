@@ -4,9 +4,9 @@
 - 관련 내용을 찾다보니 .so 라이브러리를 linking 하는 경우엔 런타임에 소스를 참고할 수 있는 방법이 있었다.
 - 예전 작성된 블로그 내용들을 구글링하고 실제로 간단하게 실습해보면서 내용들을 정리해보았다.
 
-# .so 라이브러리에 포함될 소스 파일 생성
+## .so 라이브러리에 포함될 소스 파일 생성
 - fhy.h
-```C
+```c
 #ifndef FYI_H
 #define FYI_H
 
@@ -16,8 +16,8 @@ void birthday();
 #endif
 ```
 
-# fyi.c
-```
+## fyi.c
+```c
 #include <stdio.h>
 #include "fyi.h"
 
@@ -30,22 +30,22 @@ void birthday() {
 }
 ```
 
-# object 파일(.o) 생성
+## object 파일(.o) 생성
 - fyi.c 소스 파일을 대상으로 libtool의 compile 모드로 object 파일을 생성한다.
 - fPIC 옵션을 통해 .so 라이브러리 생성 시 Position Independent Code (PIC) 프로세스마다 위치 독립적인 코드로 컴파일 하여 사용할 수 있다. (중요한 옵션)
-```
+```shell
 [root@localhost libtoolTest]# libtool --mode=compile gcc -g -O -c fyi.c
 libtool: compile:  gcc -g -O -c fyi.c  -fPIC -DPIC -o .libs/fyi.o
 libtool: compile:  gcc -g -O -c fyi.c -o fyi.o >/dev/null 2>&1
 ```
 
-# .so 라이브러리 생성
+## .so 라이브러리 생성
 - 위에서 생성된 object 파일을 통해 so 라이브러리를 생성한다.
 - 마찬가지로, 위에서 생성된 object 파일을 통해 ar 유틸리티를 활용하여 정적 라이브러리를 생성한다.
 - ranlib 유틸리티를 활용하여 object 파일에 대한 symbol index를 생성해준다.
 - .la 파일은 libtool에서 생성한 파일이다. (파일에 기술된 내용에 따라 생성되는 라이브러리가 결정되는 듯?)
 - -rpath 옵션을 넣어주어야 so 라이브러리가 생성이 되는데 아직까진 필요한 이유를 잘 모르겠다.
-```
+```shell
 [root@localhost libtoolTest]# libtool --mode=link gcc -g -O -o libfyi.la fyi.lo -rpath /usr/lib
 libtool: link: gcc -shared  -fPIC -DPIC  .libs/fyi.o    -O   -Wl,-soname -Wl,libfyi.so.0 -o .libs/libfyi.so.0.0.0
 libtool: link: (cd ".libs" && rm -f "libfyi.so.0" && ln -s "libfyi.so.0.0.0" "libfyi.so.0")
@@ -97,10 +97,10 @@ dlpreopen=''
 # Directory that this library needs to be installed in:
 libdir='/usr/lib'
 ```
-# .so 라이브러리를 직접 링킹하여 간단하게 테스트 해보기
+## .so 라이브러리를 직접 링킹하여 간단하게 테스트 해보기
 - 실제로 생성된 .so 라이브러리를 링킹하여 제대로 실행이 되는지 확인해본다.
 - fyitest.c
-```
+```c
 #include <stdio.h>
 #include "fyi.h"
 
@@ -116,10 +116,10 @@ int main() {
 - 정적 라이브러리가 아니라 동적 라이브러리를 링킹하기 때문에 컴파일 타임에는 라이브러리를 참조할 수 없다.
 - 동적 라이브러리를 컴파일 타임에 링킹한다면 udefined reference 에러가 발생함
 - libtool을 활용하여 링킹 시에는 libfyi.la 파일을 참조하여 어떻게 라이브러리를 참조할 건지 알 수가 있는 것 같다.
-```
+```shell
 [root@localhost libtoolTest]# gcc -I. -g -O -c fyitest.c
 ```
-```
+```shell
 [root@localhost libtoolTest]# libtool --mode=link gcc -g -O -o fyitest fyitest.o ./libfyi.la
 libtool: link: gcc -g -O -o .libs/fyitest fyitest.o  ./.libs/libfyi.so
 
@@ -127,10 +127,9 @@ libtool: link: gcc -g -O -o .libs/fyitest fyitest.o  ./.libs/libfyi.so
 Yoon Jin Uk
 September 24th
 ```
-
-# .so 라이브러리를 install하여 편리하게 링킹하기
+## .so 라이브러리를 install하여 편리하게 링킹하기
 - /usr/lib 경로에 libfyi.la 파일을 통해 생성된 .so 라이브러리를 동일하게 생성한다.
-```
+```shell
 [root@localhost libtoolTest]# libtool --mode=install install -c libfyi.la /usr/lib/libfyi.la
 libtool: install: install -c .libs/libfyi.so.0.0.0 /usr/lib/libfyi.so.0.0.0
 libtool: install: (cd /usr/lib && { ln -s -f libfyi.so.0.0.0 libfyi.so.0 || { rm -f libfyi.so.0 && ln -s libfyi.so.0.0.0 libfyi.so.0; }; })
@@ -160,12 +159,12 @@ more information, such as the ld(1) and ld.so(8) manual pages.
 ----------------------------------------------------------------------
 ```
 - 소스 파일이 기본적으로 참조하는 헤더 파일 경로로 테스트 파일을 복사한다.
-```
+```shell
 [root@localhost libtoolTest]# cp fyi.h /usr/include
 ```
 - fyitest 소스 파일을 통해 생성된 목적파일을 /usr/lib 경로에 있는 .so 라이브러리와 링킹하는데 이름은 libfyi일 것이다.
 - 링킹이 성공적으로 완료된 후에 실행을 해보면 에러가 발생한다.
-```
+```shell
 [root@localhost libtoolTest]# gcc -g -O -c fyitest.c
 [root@localhost libtoolTest]# gcc -L/usr/lib -lfyi -o fyitest fyitest.o
 [root@localhost libtoolTest]# ./fyitest
@@ -173,14 +172,14 @@ more information, such as the ld(1) and ld.so(8) manual pages.
 ```
 - ldd 유틸리티를 통해 링킹된 so 라이브러리를 정확하게 찾고 있는지 확인이 가능하다.
 - not found 인 것은 install 시의 주의사항 내용을 다시 한번 보면 알 수 있다.
-```
+```shell
 [root@localhost libtoolTest]# ldd ./fyitest
         linux-vdso.so.1 =>  (0x00007ffe0db6e000)
         libfyi.so.0 => not found
         libc.so.6 => /lib64/libc.so.6 (0x00007fd1a5e24000)
         /lib64/ld-linux-x86-64.so.2 (0x00007fd1a61f2000)
 ```
-```
+```shell
 If you ever happen to want to link against installed libraries
 in a given directory, LIBDIR, you must either use libtool, and
 specify the full pathname of the library, or use the `-LLIBDIR'
@@ -193,11 +192,11 @@ flag during linking and do at least one of the following:
    - have your system administrator add LIBDIR to `/etc/ld.so.conf'
 ```
 - 여기서는 LD_LIBRARY_PATH 환경 변수에 so 라이브러리가 위치한 디렉토리 경로를 추가하였다
-```
+```shell
 [root@localhost libtoolTest]# export LD_LIBRARY_PATH=/usr/lib
 ```
 - 다시 확인해보니 정상적으로 so 라이브러리를 찾았고 실행해보니 잘된다.
-```
+```shell
 [root@localhost libtoolTest]# ldd ./fyitest
         linux-vdso.so.1 =>  (0x00007ffd83ffd000)
         libfyi.so.0 => /usr/lib/libfyi.so.0 (0x00007f3b6a8e9000)
@@ -208,7 +207,6 @@ flag during linking and do at least one of the following:
 Yoon Jin Uk
 September 24th
 ```
-
 # 느낀점
 - 정적 라이브러리랑 동적 라이브러리에 대하여 링킹하고 실행하는 방법에 대하여 조금은 알게 되었다.
 - gcc나 makefile로 빌드할 때 어떻게 다른 라이브러리들을 참고하는지에 대하여 이해를 할 수 있도록 공부가 더 필요해보인다.
