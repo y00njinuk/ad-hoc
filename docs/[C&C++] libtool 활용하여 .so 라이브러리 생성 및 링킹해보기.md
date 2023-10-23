@@ -1,4 +1,4 @@
-# 개요
+## 개요
 - 현재 담당하는 프로젝트에서 thrift 파일을 생성하는 라이브러리를 어떻게 linking 하는지 궁금해졌다.
 - gcc로 컴파일 타임에 옵션(-I)으로 해당 라이브러리의 경로를 넣어주면 컴파일이 될 줄 알았는데 아니였다.
 - 관련 내용을 찾다보니 .so 라이브러리를 linking 하는 경우엔 런타임에 소스를 참고할 수 있는 방법이 있었다.
@@ -207,12 +207,12 @@ flag during linking and do at least one of the following:
 Yoon Jin Uk
 September 24th
 ```
-# 느낀점
+## 느낀점
 - 정적 라이브러리랑 동적 라이브러리에 대하여 링킹하고 실행하는 방법에 대하여 조금은 알게 되었다.
 - gcc나 makefile로 빌드할 때 어떻게 다른 라이브러리들을 참고하는지에 대하여 이해를 할 수 있도록 공부가 더 필요해보인다.
 - 어렵다. 근데 아날로그 감성도 있는 거 같고.. 나름 재밌긴 하다.
 
-# 참고 및 출처
+### 참고 및 출처
 - https://dansoonie.tistory.com/183
 - https://kldp.org/node/72693
 - https://www.lesstif.com/lpt/linux-error-while-loading-shared-libraries-95880436.html
