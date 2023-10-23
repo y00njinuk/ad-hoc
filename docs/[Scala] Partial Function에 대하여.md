@@ -1,4 +1,4 @@
-# 개요
+## 개요
 우리가 일반적으로 알고 있는 함수의 형태는 완전 함수(total function)이다.
 e.g. double 함수가 처리하지 못하는 입력값 x는 존재하지 않는다.
 ```scala
@@ -68,7 +68,7 @@ scala> List(1, 2) filter { case i: Int => i > 10 }
 res15: List[Int] = List()
 ```
 
-# 참고 및 출처
+### 참고 및 출처
 - 러닝 스칼라 책 (p.89)
 - Programming In Scala (Chatper 15 p.337 ~ 339)
 - https://www.baeldung.com/scala/partial-functions
