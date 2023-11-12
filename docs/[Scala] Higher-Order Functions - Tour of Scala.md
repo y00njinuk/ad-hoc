@@ -71,14 +71,14 @@ urlBuilder: (ssl: Boolean, domainName: String)(String, String) => String
 scala> val domainName = "www.example.com"
 domainName: String = www.example.com
 
-scala> getURL: (String, String) => String
-def getURL = urlBuilder(ssl=true, domainName)
+scala> def getURL = urlBuilder(ssl=true, domainName)
+getURL: (String, String) => String
 
-scala> endpoint: String = users
-val endpoint = "users"
+scala> val endpoint = "users"
+endpoint: String = users
 
-scala> query: String = id=1
-val query = "id=1"
+scala> val query = "id=1"
+query: String = id=1
 
 scala> val url = getURL(endpoint, query) // "https://www.example.com/users?id=1": String
 url: String = https://www.example.com/users?id=1
