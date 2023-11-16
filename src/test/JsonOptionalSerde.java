@@ -74,7 +74,7 @@ public class JsonOptionalSerde {
 
         assertDoesNotThrow(() -> {
             Book result = mapper.readValue(bookJson, Book.class);
-            assertTrue(result.getSubTitle().isEmpty());
+            assertTrue(!result.getSubTitle().isPresent());
             assertEquals(result.getSubTitle(), Optional.empty());
         });
 

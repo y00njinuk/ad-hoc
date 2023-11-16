@@ -9,12 +9,12 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- testing -->
         <rest-assured.version>3.1.1</rest-assured.version>
-        <jackson.version>2.13.3</jackson.version>
+        <jackson.version>2.12.3</jackson.version>
     </properties>
 
     <dependencies>
@@ -168,19 +168,16 @@
         <!-- https://mvnrepository.com/artifact/org.scalatest/scalatest -->
         <dependency>
             <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_2.13</artifactId>
+            <artifactId>scalatest_2.12</artifactId>
             <version>3.2.10</version>
             <scope>test</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.twitter/twitter-server -->
         <dependency>
             <groupId>com.twitter</groupId>
-            <artifactId>twitter-server_2.13</artifactId>
-            <version>22.4.0</version>
-            <scope>test</scope>
+            <artifactId>twitter-server_2.12</artifactId>
+            <version>21.12.0</version>
         </dependency>
-
-
     </dependencies>
 
     <build>
@@ -189,9 +186,25 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
+            </plugin>
+             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>sources</goal>
+                            <goal>resolve</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>javadoc</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
