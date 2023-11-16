@@ -1,4 +1,4 @@
-import com.twitter.util.{Await, Future, Return, Throw}
+import com.twitter.util._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 
@@ -10,7 +10,7 @@ class TwitterFutureTest extends AnyFlatSpec {
       Future.exception(new RuntimeException())
     )
 
-    val res: Future[Seq[Int]] =
+    val res: Future[scala.Seq[Int]] =
       Future.collectToTry(fList).map(_ map {
         case Return(value) => value
         case Throw(_) => 0
@@ -29,7 +29,7 @@ class TwitterFutureTest extends AnyFlatSpec {
     Await.result(
       Future
         .collectToTry(fList) // blocking forever. because of Future.never
-        .map { results: Seq[Any] =>
+        .map { results =>
           results foreach {
             case Return(_) => println("Return")
             case Throw(_) => println("throw")
@@ -63,5 +63,47 @@ class TwitterFutureTest extends AnyFlatSpec {
       .collect { case Return(value) => value }  // Collect only the successfully completed values
 
     res.mkString(",") shouldBe "1,2"
+  }
+
+  it should "use Scala collection API except Exception on List of Future" in {
+
+    case class obj(key: String, value: Int)
+
+    def AwaitCompletedFutures[T](futures: Seq[Future[T]]): Unit = {
+      Await.result {
+        Future.collectToTry(futures) map { results =>
+          results foreach {
+            case Return(value) => println(value)
+            case Throw(e) => println(e.getMessage)
+          }
+        }
+      }
+    }
+
+    val fObjList: List[Future[obj]] = List(
+      Future.value(obj("key1", 1)),
+      Future.value(obj("key1", 2)),
+      Future.value(obj("key2", 1)),
+      Future.value(obj("key2", 2)),
+      Future.exception(new RuntimeException("throw RuntimeException"))
+    )
+
+    val f: Seq[Future[String]] =
+      Await.result(
+        Future
+          .collectToTry(fObjList) // concurrent composition
+          .map { fResult =>
+            val (list, failed) = fResult.partition(_.isReturn)
+
+            list
+              .map(_.get)
+              .groupBy(_.key)
+              .toList
+              .map {
+                case (_, obj) => Future.value(obj.mkString(","))
+              } ++ failed.map(ex => Future.exception(ex.throwable))
+          })
+
+    AwaitCompletedFutures(f)
   }
 }
