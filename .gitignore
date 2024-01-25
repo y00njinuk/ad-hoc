@@ -1,2 +1,4 @@
 /.idea/
 /target/
+/json4s-and-circe/.bsp/
+/json4s-and-circe/.idea/
