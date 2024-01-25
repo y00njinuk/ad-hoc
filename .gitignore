@@ -2,3 +2,6 @@
 /target/
 /json4s-and-circe/.bsp/
 /json4s-and-circe/.idea/
+/json4s-and-circe/target/
+/json4s-and-circe/project/project/
+/json4s-and-circe/project/target/
